@@ -1,5 +1,10 @@
-cd "$(git rev-parse --show-toplevel)"
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd "$(git rev-parse --show-toplevel)" || exit
 typstyle --check src
+shfmt -ln bash -i 2 -d scripts/*.sh .envrc
+shellcheck -s bash scripts/*.sh .envrc
 tex_tmp=$(mktemp -d)
 trap 'rm -rf "$tex_tmp"' EXIT
 while IFS= read -r -d "" file; do
@@ -11,5 +16,7 @@ yamllint --strict .
 nixfmt --check --verify --strict flake.nix
 statix check .
 prettier --check .
-markdownlint-cli2 "**/*.md"
+mapfile -d "" -t markdown_files < <(git ls-files -z --cached --others --exclude-standard -- '*.md')
+mdformat --check "${markdown_files[@]}"
+markdownlint-cli2 "${markdown_files[@]}"
 gitleaks git

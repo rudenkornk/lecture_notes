@@ -11,9 +11,6 @@
       system = "x86_64-linux";
       pkgs = import nixpkgs { inherit system; };
 
-      # Typst wrapped with @preview packages so imports resolve offline in the sandbox.
-      # Attribute names must match the exact versions imported in the sources,
-      # e.g. `#import "@preview/cetz:0.4.2"` -> `cetz_0_4_2`.
       typstWithPackages = pkgs.typst.withPackages (p: [ p.cetz_0_4_2 ]);
 
       texWithPackages = pkgs.texliveSmall.withPackages (p: [
@@ -24,20 +21,26 @@
         p.overpic
       ]);
 
-      texTools = pkgs.texliveMinimal.withPackages (p: [
-        p.chktex
-        p.latexindent
-      ]);
-
       lintDependencies = with pkgs; [
         # Format & lint tools.
         git
         gitleaks
         markdownlint-cli2
+        (mdformat.withPlugins (
+          ps: with ps; [
+            mdformat-beautysh
+            mdformat-gfm
+          ]
+        ))
         nixfmt
         prettier
+        shellcheck
+        shfmt
         statix
-        texTools
+        (texliveMinimal.withPackages (p: [
+          p.chktex
+          p.latexindent
+        ]))
         typos
         typstyle
         yamllint

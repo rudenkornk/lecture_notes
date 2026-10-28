@@ -1,5 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
 runHook preBuild
-export TEXMFVAR=$(mktemp -d)
+TEXMFVAR=$(mktemp -d)
+export TEXMFVAR
 while IFS= read -r -d "" file; do
   course="${file#./}"
   course="${course%%/*}"
@@ -17,8 +21,8 @@ while IFS= read -r -d "" file; do
   else
     build_dir=$(mktemp -d)
     (
-      cd "$(dirname "$file")"
-      for pass in 1 2; do
+      cd "$(dirname "$file")" || exit
+      for _ in 1 2; do
         pdflatex -interaction=nonstopmode -halt-on-error -file-line-error \
           -output-directory="$build_dir" "${file##*/}"
       done
