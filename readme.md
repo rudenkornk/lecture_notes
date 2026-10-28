@@ -42,7 +42,11 @@ typst watch --root src src/data-science-math-hw/hw2.typ hw2.pdf # Live preview (
 
 Use `--root src` when compiling or watching individual documents so shared imports resolve.
 
-The `format` and `lint` apps bundle typstyle, typos, yamllint, nixfmt, statix, prettier, markdownlint-cli2 and gitleaks;
-see their definitions in `flake.nix`. All tools are also available individually inside the dev shell.
+The `format` and `lint` apps bundle typstyle, latexindent, chktex, typos, yamllint, nixfmt, statix, prettier,
+markdownlint-cli2 and gitleaks;
+their commands live in `scripts/format.sh` and `scripts/lint.sh`, with dependencies defined in `flake.nix`.
+The document build phase lives in `scripts/build.sh`.
+Use the Nix commands above to run these scripts in their configured environments.
+All tools are also available individually inside the dev shell.
 
 CI runs `nix run .#lint` plus `nix build`; see `.github/workflows/workflow.yml`.
