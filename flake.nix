@@ -24,6 +24,11 @@
         p.overpic
       ]);
 
+      texTools = pkgs.texliveMinimal.withPackages (p: [
+        p.chktex
+        p.latexindent
+      ]);
+
       lintDependencies = with pkgs; [
         # Format & lint tools.
         git
@@ -32,6 +37,7 @@
         nixfmt
         prettier
         statix
+        texTools
         typos
         typstyle
         yamllint
@@ -43,6 +49,11 @@
         text = ''
           cd "$(git rev-parse --show-toplevel)"
           typstyle -i src
+          tex_tmp=$(mktemp -d)
+          trap 'rm -rf "$tex_tmp"' EXIT
+          while IFS= read -r -d "" file; do
+            latexindent -d -s -wd -c "$tex_tmp" "$file"
+          done < <(find src -type f \( -name "*.tex" -o -name "*.sty" \) -print0)
           typos -w
           nixfmt --verify --strict flake.nix
           statix fix .
@@ -57,6 +68,12 @@
         text = ''
           cd "$(git rev-parse --show-toplevel)"
           typstyle --check src
+          tex_tmp=$(mktemp -d)
+          trap 'rm -rf "$tex_tmp"' EXIT
+          while IFS= read -r -d "" file; do
+            latexindent -d -s -k -c "$tex_tmp" "$file"
+            chktex -q -I0 -H1 "$file"
+          done < <(find src -type f \( -name "*.tex" -o -name "*.sty" \) -print0)
           typos
           yamllint --strict .
           nixfmt --check --verify --strict flake.nix
