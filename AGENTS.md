@@ -25,8 +25,9 @@ typst watch --root src src/data-science-math-hw/hw2.typ hw2.pdf # Live preview (
 ```
 
 The `format`/`lint` apps are defined in `flake.nix` (`writeShellApplication`) and bundle:
-typstyle, typos, yamllint, nixfmt, statix, prettier, markdownlint-cli2, gitleaks.
-To add or adjust a tool, edit the app scripts and `lintDependencies` there.
+typstyle, latexindent, chktex, typos, yamllint, nixfmt, statix, prettier, markdownlint-cli2, gitleaks.
+To add or adjust a tool, edit `scripts/format.sh` or `scripts/lint.sh` and `lintDependencies` in `flake.nix`.
+The document build phase is in `scripts/build.sh`; Nix loads all three scripts with `builtins.readFile`.
 
 CI (`.github/workflows/workflow.yml`) runs `nix run .#lint` plus `nix build` on push/PR to `main`.
 Actions are SHA-pinned; dependabot updates them and `flake.lock` weekly.
