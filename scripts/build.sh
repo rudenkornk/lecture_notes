@@ -16,6 +16,8 @@ while IFS= read -r -d "" file; do
   else
     continue
   fi
+  output=".build-pdfs/$output"
+  mkdir -p "$(dirname "$output")"
   if [[ "$file" == *.typ ]]; then
     typst compile --root . --ignore-system-fonts "$file" "$output"
   else
