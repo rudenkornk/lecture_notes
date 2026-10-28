@@ -1,5 +1,11 @@
 # Build outputs
 *.pdf
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.bak*
 
 # Nix build symlinks
 result
