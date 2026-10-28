@@ -4,9 +4,11 @@ This file provides guidance to coding agents (Claude Code and others) when worki
 
 ## What this is
 
-Typst homework documents for the SHAD program (Yandex School of Data Analysis).
-Every `*.typ` file under `src/` is a standalone document compiled to its own PDF; `nix build` compiles them all into `./result/`,
-preserving the directory structure (`src/math/hw2.typ` → `result/math/hw2.pdf`).
+Typst lecture notes and homework for multiple courses.
+Each course lives directly under `src/`; homework uses a separate `<course>-hw/` directory.
+`nix build` compiles course `main.typ` entry points to `result/<course>.pdf` and
+top-level homework `.typ` files to `result/<course>-hw/<name>.pdf`.
+Lecture chapters, nested homework fragments, and `src/_shared/` are not compiled independently.
 
 Nix is the only prerequisite. All tools (typst, formatters, linters) come from the flake devshell — do not rely on ambient system tools; versions may differ.
 
@@ -18,8 +20,8 @@ nix flake check                        # Same as `nix build`, via flake checks.
 nix run .#format                       # Format everything (fix mode).
 nix run .#lint                         # Lint everything (check mode, same as CI).
 nix develop --ignore-env               # Enter the devshell (individual tools + typst).
-typst compile src/math/hw2.typ         # Compile a single document (in devshell).
-typst watch src/math/hw2.typ hw2.pdf   # Live preview while editing (in devshell).
+typst compile --root src src/data-science-math-hw/hw2.typ # Compile one document (in devshell).
+typst watch --root src src/data-science-math-hw/hw2.typ hw2.pdf # Live preview (in devshell).
 ```
 
 The `format`/`lint` apps are defined in `flake.nix` (`writeShellApplication`) and bundle:
@@ -36,8 +38,12 @@ Actions are SHA-pinned; dependabot updates them and `flake.lock` weekly.
   If a document imports a new package or version (e.g. `@preview/cetz:0.5.2`), add the matching nixpkgs attribute
   (`p.cetz_0_5_2` — underscores, from `typstPackages`) to the `typstWithPackages` list,
   or the sandboxed build fails with "failed to download package".
-- **Every `.typ` under `src/` must compile standalone.** If a shared, import-only `.typ` is ever added,
-  introduce an exclusion convention (e.g. skip `_*.typ` in the derivation's `find`).
+- **Entry points**: only `src/<course>/main.typ` and top-level `src/<course>-hw/*.typ` are compiled.
+  Include lecture chapters explicitly from `main.typ` in the desired order.
+  Keep homework fragments in subdirectories and shared helpers in `src/_shared/`.
+- **Shared style**: entry points import `"/_shared/style.typ": style` and apply `#show: style`.
+  Use local set/show rules after that rule for overrides; keep document metadata in the entry point.
+  Pass `--root src` to local Typst commands so shared imports resolve, matching the build's source root.
 - **Fonts**: only Typst's embedded defaults are available (the build passes `--ignore-system-fonts`).
   A `#set text(font: ...)` with any other font requires adding the font package and `TYPST_FONT_PATHS` to the derivation.
 

@@ -61,7 +61,7 @@
     in
     {
       packages.${system}.default = pkgs.stdenvNoCC.mkDerivation {
-        pname = "shad";
+        pname = "lecture-notes";
         version = "0.1.0";
 
         src = ./src;
@@ -112,7 +112,7 @@
       devShells.${system}.default = pkgs.mkShell {
         packages = [ typstWithPackages ] ++ lintDependencies;
         shellHook = ''
-          echo "Welcome to the shad devshell!"
+          echo "Welcome to the lecture-notes devshell!"
         '';
       };
 

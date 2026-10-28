@@ -1,19 +1,10 @@
 #import "@preview/cetz:0.4.2"
+#import "../_shared/style.typ": style
 
+#show: style
 
-#show link: set text(fill: blue)
-#show cite: set text(fill: blue)
-#show ref: set text(fill: blue)
 
 #let rank = math.op("rank")
-
-#set page(
-  paper: "a5",
-  margin: (left: 1.5cm, right: 1.5cm, top: 1.0cm, bottom: 2.0cm),
-  numbering: "1",
-  number-align: center + bottom,
-)
-#set par(justify: true)
 
 #let sidenote(body) = place(
   right,
@@ -23,11 +14,6 @@
     reflow: false,
     body,
   ))),
-)
-
-#set text(
-  size: 9pt,
-  lang: "en",
 )
 
 #v(1.5em)
