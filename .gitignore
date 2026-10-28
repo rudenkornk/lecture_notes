@@ -10,3 +10,4 @@
 # Nix build symlinks
 result
 result-*
+.direnv/
