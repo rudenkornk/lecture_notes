@@ -60,8 +60,6 @@
       };
     in
     {
-      # Compiles every *.typ file under src/ into its own PDF,
-      # preserving the relative directory structure in $out.
       packages.${system}.default = pkgs.stdenvNoCC.mkDerivation {
         pname = "shad";
         version = "0.1.0";
@@ -73,8 +71,19 @@
         buildPhase = ''
           runHook preBuild
           while IFS= read -r -d "" file; do
-            typst compile --ignore-system-fonts "$file" "''${file%.typ}.pdf"
-          done < <(find . -type f -name "*.typ" -print0)
+            course="''${file#./}"
+            course="''${course%%/*}"
+            if [[ "$course" == "_shared" ]]; then
+              continue
+            elif [[ "$course" == *-hw ]]; then
+              output="''${file%.typ}.pdf"
+            elif [[ "''${file##*/}" == "main.typ" ]]; then
+              output="$course.pdf"
+            else
+              continue
+            fi
+            typst compile --root . --ignore-system-fonts "$file" "$output"
+          done < <(find . -mindepth 2 -maxdepth 2 -type f -name "*.typ" -print0)
           runHook postBuild
         '';
 
@@ -107,7 +116,7 @@
         '';
       };
 
-      # `nix flake check` builds the package, i.e. compiles every document.
+      # `nix flake check` builds all document entry points.
       checks.${system}.default = self.packages.${system}.default;
     };
 }
