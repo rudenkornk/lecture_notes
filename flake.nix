@@ -19,6 +19,7 @@
         p.eepic
         p.expdlist
         p.overpic
+        p.pdfpages
       ]);
 
       lintDependencies = with pkgs; [
@@ -74,6 +75,7 @@
 
         installPhase = ''
           runHook preInstall
+          cd .build-pdfs
           while IFS= read -r -d "" pdf; do
             install -Dm644 "$pdf" "$out/''${pdf#./}"
           done < <(find . -type f -name "*.pdf" -print0)
