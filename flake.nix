@@ -13,6 +13,13 @@
 
       typstWithPackages = pkgs.typst.withPackages (p: [ p.cetz_0_4_2 ]);
 
+      typstFontPaths = pkgs.lib.makeSearchPath "share/fonts" [
+        pkgs.paratype-pt-serif
+        pkgs.paratype-pt-sans
+        pkgs.stix-two
+        pkgs.dejavu_fonts
+      ];
+
       texWithPackages = pkgs.texliveSmall.withPackages (p: [
         p.collection-langcyrillic
         p.cm-super
@@ -66,6 +73,8 @@
 
         src = ./src;
 
+        TYPST_FONT_PATHS = typstFontPaths;
+
         nativeBuildInputs = [
           typstWithPackages
           texWithPackages
@@ -97,6 +106,7 @@
       };
 
       devShells.${system}.default = pkgs.mkShell {
+        TYPST_FONT_PATHS = typstFontPaths;
         packages = [
           typstWithPackages
           texWithPackages
