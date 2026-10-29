@@ -47,7 +47,8 @@ Actions are SHA-pinned; dependabot updates them and `flake.lock` weekly.
 - **Entry points**: only course `main.typ`/`main.tex` and top-level homework `.typ`/`.tex` files are compiled.
   Use only one entry point per output PDF; include lecture chapters explicitly in the desired order.
   Keep homework fragments in subdirectories and shared helpers in `src/_shared/`.
-- **Typst shared style**: entry points import `"/_shared/style.typ": style` and apply `#show: style`.
+- **Typst shared style**: entry points import `"../_shared/style.typ": style` and apply `#show: style`.
+  Use relative imports so editor tooling resolves shared files.
   Use local set/show rules after that rule for overrides; keep document metadata in the entry point.
   Pass `--root src` to local Typst commands so shared imports resolve, matching the build's source root.
 - **Fonts**: only Typst's embedded defaults are available (the build passes `--ignore-system-fonts`).
