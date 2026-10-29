@@ -6,15 +6,7 @@
 
 #let rank = math.op("rank")
 
-#let sidenote(body) = place(
-  right,
-  dx: 2cm,
-  block(width: 3cm, text(size: 0.85em, fill: luma(100), rotate(
-    90deg,
-    reflow: false,
-    body,
-  ))),
-)
+#let sidenote(body) = block(text(size: 0.85em, fill: luma(100), body))
 
 #v(1.5em)
 
