@@ -44,39 +44,3 @@ typst watch --root src src/linear-algebra/main.typ notes.pdf # Example live prev
 ```
 
 Use `--root src` when compiling or watching individual documents so shared imports resolve.
-
-### LaTeX
-
-LaTeX documents use project-local `.sty` files.
-The build runs `pdflatex` twice from each entry point's directory, preserving relative style and figure paths.
-Additional bibliography and index processing is not configured.
-Required TeX packages are listed in `texWithPackages` in `flake.nix`.
-
-For the example layout above, enter the development shell and compile a homework locally with:
-
-```bash
-cd src/linear-algebra-hw
-export TEXMFVAR=$(mktemp -d)
-pdflatex -interaction=nonstopmode -halt-on-error -file-line-error hw1.tex
-pdflatex -interaction=nonstopmode -halt-on-error -file-line-error hw1.tex
-```
-
-The writable `TEXMFVAR` directory allows Cyrillic font metrics to be generated even in an environment without `HOME`.
-
-`nix run .#format` formats `.tex` and `.sty` files with `latexindent`.
-`nix run .#lint` checks their formatting and runs `chktex`, including style files and document preambles.
-Intentional constructs can use targeted `% chktex <number>` or `% chktex-file <number>` suppressions.
-
-The `format` and `lint` apps bundle typstyle, latexindent, chktex, shfmt, ShellCheck, mdformat,
-typos, yamllint, nixfmt, statix, prettier,
-markdownlint-cli2 and gitleaks;
-their commands live in `scripts/format.sh` and `scripts/lint.sh`, with dependencies defined in `flake.nix`.
-The document build phase lives in `scripts/build.sh`.
-Use the Nix commands above to run these scripts in their configured environments.
-All tools are also available individually inside the dev shell.
-
-Shell formatting and lint cover `scripts/*.sh` and `.envrc`, with Bash syntax and two-space indentation.
-Markdown formatting uses `mdformat` with `mdformat-beautysh` and `mdformat-gfm`, alongside `markdownlint-cli2`.
-Both Markdown tools check tracked and non-ignored untracked files, excluding generated directories such as `.direnv/`.
-
-CI runs `nix run .#lint` plus `nix build`; see `.github/workflows/workflow.yml`.

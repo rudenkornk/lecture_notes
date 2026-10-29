@@ -55,6 +55,7 @@ Actions are SHA-pinned; dependabot updates them and `flake.lock` weekly.
   and DejaVu fonts through `TYPST_FONT_PATHS`, alongside Typst's embedded defaults.
   Additional fonts require adding their packages to `typstFontPaths` in `flake.nix`.
 - **LaTeX**: compile directly with two `pdflatex` passes from the entry point's directory.
+  Additional bibliography and index processing is not configured.
   Keep `.sty` files local to the project and add required TeX packages to `texWithPackages` in `flake.nix`.
   For local compilation without `HOME`, set `TEXMFVAR` to a writable temporary directory for Cyrillic font metrics.
   The build does this automatically and keeps auxiliary outputs in temporary directories.
