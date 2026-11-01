@@ -25,12 +25,14 @@ typst watch --root src src/data-science-math-hw/hw2.typ hw2.pdf # Live preview (
 ```
 
 The `format`/`lint` apps are defined in `flake.nix` (`writeShellApplication`) and bundle:
-typstyle, latexindent, chktex, shfmt, ShellCheck, mdformat, typos, yamllint, nixfmt, statix, prettier,
+Ruff, ty, typstyle, latexindent, chktex, shfmt, ShellCheck, mdformat, typos, yamllint, nixfmt, statix, prettier,
 markdownlint-cli2, gitleaks.
 To add or adjust a tool, edit `scripts/format.sh` or `scripts/lint.sh` and `lintDependencies` in `flake.nix`.
 The document build phase is in `scripts/build.sh`; Nix loads all three scripts with `builtins.readFile`.
 `texWithPackages` contains compiler/document packages; `lintDependencies` includes a separate minimal TeX tools environment.
 The devshell includes `texWithPackages` explicitly alongside `lintDependencies`.
+The media devshell extends the default devshell with `mediaDependencies` for audio and image processing.
+Python tools use project-wide settings in `pyproject.toml`.
 Shell checks cover `scripts/*.sh` and `.envrc`, using Bash syntax and two-space indentation.
 Markdown tools use Git's tracked and non-ignored untracked files, excluding generated directories such as `.direnv/`.
 
@@ -61,6 +63,36 @@ Actions are SHA-pinned; dependabot updates them and `flake.lock` weekly.
   The build does this automatically and keeps auxiliary outputs in temporary directories.
 - **LaTeX checks**: format and lint both `.tex` and `.sty`, including preambles.
   Use targeted ChkTeX suppressions for intentional constructs when preserving an imported document's appearance.
+
+## Lecture recordings
+
+Use the media devshell for audio extraction, transcription, and image processing.
+`scripts/transcribe.py` uses only Python's standard library.
+
+```bash
+nix develop .#media
+mkdir -p ~/Downloads/ml/processed
+bash scripts/extract-audio.sh ~/Downloads/ml/lecture.mp4 ~/Downloads/ml/processed/lecture.wav
+python scripts/transcribe.py ~/Downloads/ml/processed/lecture.wav \
+    ~/Downloads/ml/processed/transcription --key-file /path/to/yakey --folder-id YOUR_FOLDER_ID
+```
+
+- Extraction preserves video timestamps and produces mono, 16 kHz, 16-bit PCM WAV without overwriting existing files.
+- SpeechKit uses Russian recognition with normalization disabled, 900-second chunks, 10-second overlaps,
+  and up to four concurrent workers.
+  The encoded request budget is 55 MB, below the 60 MB direct-upload limit.
+- The output directory stores the audio/settings manifest, per-chunk operation IDs, raw JSONL results,
+  `words.json`, and a timestamped `transcript.txt`.
+  Rerun the same command to resume; changed audio or settings require a new output directory.
+  Use only one transcription process per output directory.
+- Remote recognition results expire after three days; downloaded results remain reusable.
+  Failed overlap matching requires inspecting saved results.
+  API errors do not trigger automatic resubmission.
+  If a submission succeeded but its operation ID was not saved, inspect the cloud operation before rerunning.
+- Notes are compact reminders of an attended lecture, preferably at most three pages in the course's existing style.
+  Let the recording determine coverage and use slides and notebooks to verify details.
+  Crop illustrations from supplied materials, retain source references, and inspect compression at printed size.
+  Keep credentials, recordings, and intermediate files outside Git.
 
 ## Conventions
 
