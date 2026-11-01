@@ -54,6 +54,14 @@
         yamllint
       ];
 
+      mediaDependencies = [
+        pkgs.ffmpeg-headless
+        (pkgs.python3.withPackages (ps: [
+          ps.pillow
+          ps.pymupdf
+        ]))
+      ];
+
       formatApp = pkgs.writeShellApplication {
         name = "format";
         runtimeInputs = lintDependencies;
@@ -116,6 +124,12 @@
           shellHook = ''
             echo "Welcome to the lecture-notes devshell!"
           '';
+        };
+
+        media = pkgs.mkShell {
+          inputsFrom = [ self.devShells.${system}.default ];
+          inherit (self.devShells.${system}.default) TYPST_FONT_PATHS;
+          packages = mediaDependencies;
         };
       };
 
