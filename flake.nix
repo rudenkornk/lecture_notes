@@ -105,16 +105,18 @@
         };
       };
 
-      devShells.${system}.default = pkgs.mkShell {
-        TYPST_FONT_PATHS = typstFontPaths;
-        packages = [
-          typstWithPackages
-          texWithPackages
-        ]
-        ++ lintDependencies;
-        shellHook = ''
-          echo "Welcome to the lecture-notes devshell!"
-        '';
+      devShells.${system} = {
+        default = pkgs.mkShell {
+          TYPST_FONT_PATHS = typstFontPaths;
+          packages = [
+            typstWithPackages
+            texWithPackages
+          ]
+          ++ lintDependencies;
+          shellHook = ''
+            echo "Welcome to the lecture-notes devshell!"
+          '';
+        };
       };
 
       # `nix flake check` builds all document entry points.
