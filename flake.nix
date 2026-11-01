@@ -42,6 +42,7 @@
         ))
         nixfmt
         prettier
+        ruff
         shellcheck
         shfmt
         statix
@@ -49,6 +50,7 @@
           p.chktex
           p.latexindent
         ]))
+        ty
         typos
         typstyle
         yamllint

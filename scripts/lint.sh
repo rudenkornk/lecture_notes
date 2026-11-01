@@ -2,6 +2,9 @@
 set -euo pipefail
 
 cd "$(git rev-parse --show-toplevel)" || exit
+ruff check .
+ruff format --check .
+ty check
 typstyle --check src
 shfmt -ln bash -i 2 -d scripts/*.sh .envrc
 shellcheck -s bash scripts/*.sh .envrc

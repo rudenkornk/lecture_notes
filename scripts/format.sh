@@ -2,6 +2,8 @@
 set -euo pipefail
 
 cd "$(git rev-parse --show-toplevel)" || exit
+ruff check --fix .
+ruff format .
 typstyle -i src
 shfmt -ln bash -i 2 -w scripts/*.sh .envrc
 tex_tmp=$(mktemp -d)
