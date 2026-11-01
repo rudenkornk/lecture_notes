@@ -18,6 +18,7 @@ Nix is the only prerequisite. All tools (typst, formatters, linters) come from t
 nix build                              # Compile all documents into ./result/.
 nix flake check                        # Same as `nix build`, via flake checks.
 nix run .#format                       # Format everything (fix mode).
+nix run .#format -- --check             # Check formatting without changing files.
 nix run .#lint                         # Lint everything (check mode, same as CI).
 nix develop --ignore-env               # Enter the devshell (individual tools + typst).
 typst compile --root src src/data-science-math-hw/hw2.typ # Compile one document (in devshell).
@@ -28,6 +29,7 @@ The `format`/`lint` apps are defined in `flake.nix` (`writeShellApplication`) an
 Ruff, ty, typstyle, latexindent, chktex, shfmt, ShellCheck, mdformat, typos, yamllint, nixfmt, statix, prettier,
 markdownlint-cli2, gitleaks.
 To add or adjust a tool, edit `scripts/format.sh` or `scripts/lint.sh` and `lintDependencies` in `flake.nix`.
+CI runs formatting checks separately from lint and type checks.
 The document build phase is in `scripts/build.sh`; Nix loads all three scripts with `builtins.readFile`.
 `texWithPackages` contains compiler/document packages; `lintDependencies` includes a separate minimal TeX tools environment.
 The devshell includes `texWithPackages` explicitly alongside `lintDependencies`.
@@ -36,7 +38,8 @@ Python tools use project-wide settings in `pyproject.toml`.
 Shell checks cover `scripts/*.sh` and `.envrc`, using Bash syntax and two-space indentation.
 Markdown tools use Git's tracked and non-ignored untracked files, excluding generated directories such as `.direnv/`.
 
-CI (`.github/workflows/workflow.yml`) runs `nix run .#lint` plus `nix build` on push/PR to `main`.
+CI (`.github/workflows/workflow.yml`) runs `nix run .#format -- --check`, `nix run .#lint`,
+and `nix build` on push/PR to `main`.
 Actions are SHA-pinned; dependabot updates them and `flake.lock` weekly.
 
 ## Gotchas
