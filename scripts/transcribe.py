@@ -1,6 +1,5 @@
+#!/usr/bin/env python3
 """Transcribe lecture audio with resumable, overlapping SpeechKit requests."""
-
-# ruff: noqa: INP001
 
 import argparse
 import base64
