@@ -1,70 +1,37 @@
-# Turn a lecture recording into compact notes
+# Typeset compact lecture notes from supplied materials
 
-Create notes for the provided lecture in this repository, using its recording and supplementary materials.
+Create notes for the provided lecture in this repository, using the supplied materials.
+Materials may include a transcript, slides, notebooks, PDFs, or other sources; a recording or transcript is not required.
 The reader attended the lecture: the goal is compact reminders, not a textbook or a verbatim transcript.
 
 Materials directory: `<path>`.
 Course directory: `src/<course>/`.
-Yandex API-key file: `<path>`.
-Yandex folder ID: `<folder-id>`.
 
 Follow repository instructions and inspect the existing course notes before starting.
 Use the existing language, notation, typography, chapter structure, and illustration helpers.
-You may independently choose summaries, layout, crops, compression, and transcription settings within these requirements.
+You may independently choose summaries, layout, crops, and compression within these requirements.
 Ask about missing required inputs, substantial source ambiguities, or changes to reusable tooling.
-If several recordings could be the intended lecture, clarify which one to use.
+If the intended lecture or the scope of the supplied materials is unclear, clarify it before drafting.
+Do not extract audio or run speech recognition as part of this task; no API credentials are needed.
 
 ## Inspect all materials
 
-- Inventory the recording, slides, notebooks, and other supplements.
+- Inventory the supplied transcripts, slides, notebooks, PDFs, and other sources.
   Confirm the lecture topic, date, and next chapter number from the materials and existing notes.
-- Inspect the recording's duration and audio streams.
-  Review slides and notebook text, code, and saved outputs; use video frames for demonstrations and annotations.
-- Let the recording determine topic coverage and emphasis.
+- Read the complete transcript when supplied, preferring `transcript-reviewed.txt` over raw recognition output.
+  Review slides, PDFs, and notebook text, code, and saved outputs.
+  Use supplied recordings or video frames to clarify demonstrations and annotations when available.
+- When a transcript is supplied, let the lecture determine topic coverage and emphasis.
+  Otherwise, base coverage on the supplied materials and the agreed lecture scope.
   Use all supplied resources to clarify explanations, verify formulas, and choose illustrations.
   Reviewing a resource does not require including every topic it contains.
+- Check any reported transcript uncertainties against the available sources.
+  Ask about unresolved technical terms, negations, numbers, formulas, or conflicting claims that affect the notes.
 - Keep original materials unchanged.
-  Store audio, raw recognition results, transcripts, previews, and processing scripts outside the repository,
+  Store previews and processing scripts outside the repository,
   preferably in a `processed/` directory beside the materials.
 
-## Extract and transcribe the full recording
-
-Use the media devshell for audio extraction, transcription, and image processing.
-`scripts/transcribe.py` uses only Python's standard library.
-
-```bash
-nix develop .#media
-mkdir -p "<processed>"
-bash scripts/extract-audio.sh "<recording>" "<processed>/lecture.wav"
-python scripts/transcribe.py "<processed>/lecture.wav" "<processed>/transcription" \
-    --key-file "<key-file>" --folder-id "<folder-id>"
-```
-
-- Read credentials from the supplied file; do not print them or place them in source code or commits.
-- Extraction preserves recording-relative timestamps, including pauses, and produces mono, 16 kHz, 16-bit PCM WAV.
-  It refuses to overwrite an existing audio file.
-- Use Yandex SpeechKit asynchronous recognition with Russian recognition by default.
-  Start with the script's defaults: 900-second chunks, 10-second overlaps, and four concurrent workers.
-- The script uses a 55 MB encoded-request budget, below the 60 MB direct-upload limit,
-  including Base64 and request overhead.
-  Check the current API limits before increasing chunk sizes or concurrency.
-- Reuse saved results and operation IDs when resuming instead of repeating billable submissions.
-  The output directory stores the audio/settings manifest, per-chunk operation IDs, raw JSONL results,
-  `words.json`, and a timestamped `transcript.txt`.
-  Rerun the same command to resume; changed audio or settings require a new output directory.
-  Use only one transcription process per output directory.
-  Remote recognition results expire after three days; downloaded results remain reusable.
-  API errors do not trigger automatic resubmission.
-  If a request's outcome is uncertain, investigate before resubmitting it.
-  If submission succeeded but its operation ID was not saved, inspect the cloud operation before rerunning.
-- Keep normalization and literary rewriting disabled initially to preserve technical wording.
-  Check the script's supported settings before deciding to change recognition behavior.
-- Verify that the chunks cover the entire audio and that merging neither duplicates nor drops boundary phrases.
-  Inspect uncertain joins against raw results and the recording.
-  Account for genuine silence rather than treating every transcript gap as missing recognition.
-- Read the complete transcript before drafting.
-  Recognition can distort technical terms, negations, numbers, and spoken formulas;
-  resolve these against slides, notebook code, and the relevant recording segment.
+Use the media devshell for image processing.
 
 ## Write concise recall notes
 
@@ -75,7 +42,8 @@ python scripts/transcribe.py "<processed>/lecture.wav" "<processed>/transcriptio
   Include a short example when it helps recall an important idea or common mistake.
 - Condense classroom discussion, repeated explanations, long code demonstrations, and administrative remarks.
   Include code only when a small snippet is useful for remembering the method.
-- Preserve qualifications made orally, even when slides state a simplified claim.
+- Preserve qualifications recorded in the supplied materials, including oral qualifications captured in a transcript,
+  even when slides state a simplified claim.
   Do not reproduce an obvious source typo as a mathematical fact or silently invent missing explanations.
   Ask about substantive uncertainties or conflicting claims.
 - Organize the chapter around the lecture's main topics, preserving their logical progression.
@@ -110,7 +78,7 @@ python scripts/transcribe.py "<processed>/lecture.wav" "<processed>/transcriptio
 ## Integrate and verify
 
 - Add the chapter to the course entry point and update affected metadata, such as the lecture count.
-- Check content against the complete transcript and supplementary materials.
+- Check content against all supplied materials, including the complete transcript when available.
   Confirm that every major taught topic is represented at an appropriate level of detail.
 - Compile the course and inspect every new output page at readable resolution.
   Check equations, column flow, captions, crop boundaries, small labels, and page breaks.
@@ -122,7 +90,7 @@ python scripts/transcribe.py "<processed>/lecture.wav" "<processed>/transcriptio
 
 ## Organize commits and report
 
-- Reuse existing media and Python tooling.
+- Reuse existing media tooling.
   If approved tooling changes are needed, put mechanical preparation first, then tooling,
   then already formatted and checked scripts or instructions.
 - Put the new notes, final compressed images, entry-point integration, and metadata updates
@@ -132,4 +100,4 @@ python scripts/transcribe.py "<processed>/lecture.wav" "<processed>/transcriptio
   Do not push without an explicit request.
 
 Finish with the course PDF path, the new lecture's page range and page count,
-the locations of the extracted audio and transcript, checks performed, any unresolved uncertainties, and commit status.
+the source materials used, checks performed, any unresolved uncertainties, and commit status.
