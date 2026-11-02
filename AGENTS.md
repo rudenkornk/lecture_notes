@@ -11,6 +11,7 @@ top-level homework `.typ` or `.tex` files to `result/<course>-hw/<name>.pdf`.
 Lecture chapters, nested homework fragments, and `src/_shared/` are not compiled independently.
 
 Nix is the only prerequisite. All tools (typst, formatters, linters) come from the flake devshell — do not rely on ambient system tools; versions may differ.
+Cloud transcription is an exception: use the installed `sops` for credential decryption.
 
 ## Commands
 
