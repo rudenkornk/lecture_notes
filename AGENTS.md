@@ -12,6 +12,7 @@ Lecture chapters, nested homework fragments, and `src/_shared/` are not compiled
 
 Nix is the only prerequisite. All tools (typst, formatters, linters) come from the flake devshell — do not rely on ambient system tools; versions may differ.
 Cloud transcription is an exception: use the installed `sops` for credential decryption.
+Local transcription uses the installed CUDA-enabled `whisper-ctranslate2` and its cached model.
 
 ## Commands
 
