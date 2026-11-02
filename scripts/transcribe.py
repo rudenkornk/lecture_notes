@@ -81,8 +81,7 @@ class _Operation(TypedDict):
 class _Arguments(argparse.Namespace):
     audio: Path
     output: Path
-    key_file: Path
-    folder_id: str
+    creds: Path
     chunk_seconds: int
     overlap_seconds: int
     workers: int
@@ -214,12 +213,21 @@ def _timestamp(seconds: float) -> str:
     return f"{seconds // 3600:02}:{seconds // 60 % 60:02}:{seconds % 60:02}"
 
 
+def _credentials(path: Path) -> tuple[str, str]:
+    credentials = json.loads(path.read_text(encoding="utf-8"))
+    folder_id: object = credentials["folder_id"]
+    api_key: object = credentials["ai_studio"]["api_key"]
+    if not isinstance(folder_id, str) or not folder_id.strip() or not isinstance(api_key, str) or not api_key.strip():
+        message = "Credentials require nonempty folder_id and ai_studio.api_key strings"
+        raise ValueError(message)
+    return folder_id.strip(), api_key.strip()
+
+
 def _prepare_inputs() -> tuple[_Arguments, float, list[_Chunk]]:
     parser = argparse.ArgumentParser(description="Transcribe mono PCM WAV with Yandex SpeechKit v3.")
     parser.add_argument("audio", type=Path)
     parser.add_argument("output", type=Path)
-    parser.add_argument("--key-file", type=Path, required=True)
-    parser.add_argument("--folder-id", required=True)
+    parser.add_argument("--creds", type=Path, required=True, help="JSON containing folder_id and ai_studio.api_key")
     parser.add_argument("--chunk-seconds", type=int, default=900)
     parser.add_argument("--overlap-seconds", type=int, default=10)
     parser.add_argument("--workers", type=int, default=4)
@@ -254,10 +262,10 @@ def _prepare_inputs() -> tuple[_Arguments, float, list[_Chunk]]:
     return args, frames / rate, chunks
 
 
-def _prepare_output(args: _Arguments, chunks: list[_Chunk]) -> None:
+def _prepare_output(args: _Arguments, chunks: list[_Chunk], folder_id: str) -> None:
     with args.audio.open("rb") as source:
         digest = hashlib.file_digest(source, "sha256").hexdigest()
-    manifest = {"sha256": digest, "model": MODEL, "folder_id": args.folder_id, "chunks": chunks}
+    manifest = {"sha256": digest, "model": MODEL, "folder_id": folder_id, "chunks": chunks}
     args.output.mkdir(parents=True, exist_ok=True)
     manifest_path = args.output / "manifest.json"
     if manifest_path.exists() and json.loads(manifest_path.read_text()) != manifest:
@@ -270,10 +278,11 @@ def main() -> None:
     """Transcribe the WAV selected by CLI arguments and save resumable results."""
     logging.basicConfig(level=logging.INFO, format="%(message)s", stream=sys.stdout)
     args, duration, chunks = _prepare_inputs()
-    _prepare_output(args, chunks)
+    folder_id, api_key = _credentials(args.creds)
+    _prepare_output(args, chunks, folder_id)
     headers = {
-        "Authorization": f"Api-key {args.key_file.read_text().strip()}",
-        "x-folder-id": args.folder_id,
+        "Authorization": f"Api-key {api_key}",
+        "x-folder-id": folder_id,
         "Content-Type": "application/json",
     }
     _logger.info("%.1fs audio; %s overlapping chunks", duration, len(chunks))
@@ -287,11 +296,11 @@ def main() -> None:
     group: list[_Word] = []
     for word in words:
         if group and word["start"] - group[0]["start"] >= TEXT_BLOCK_SECONDS:
-            lines.append(f"[{_timestamp(group[0]['start'])}] " + " ".join(w["text"] for w in group))
+            lines.append(f"{_timestamp(group[0]['start'])} -- " + " ".join(w["text"] for w in group))
             group = []
         group.append(word)
     if group:
-        lines.append(f"[{_timestamp(group[0]['start'])}] " + " ".join(w["text"] for w in group))
+        lines.append(f"{_timestamp(group[0]['start'])} -- " + " ".join(w["text"] for w in group))
     _save(args.output / "transcript.txt", "\n".join(lines) + "\n")
 
 

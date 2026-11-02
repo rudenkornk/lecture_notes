@@ -4,8 +4,6 @@ Produce a verified, timestamped transcript of the provided lecture recording.
 Do not summarize the lecture, write course notes, or change course entry points.
 
 Materials directory: `<path>`.
-Yandex API-key file: `<path>`.
-Yandex folder ID: `<folder-id>`.
 
 Follow repository instructions and reuse the existing transcription tooling.
 You may independently choose transcription settings and routine verification steps within these requirements.
@@ -31,10 +29,11 @@ nix develop .#media
 mkdir -p "<processed>"
 bash scripts/extract-audio.sh "<recording>" "<processed>/lecture.wav"
 python scripts/transcribe.py "<processed>/lecture.wav" "<processed>/transcription" \
-    --key-file "<key-file>" --folder-id "<folder-id>"
+    --creds <(sops --decrypt ~/projects/dotfiles/nix/secrets/yacloud.sops.json)
 ```
 
-- Read credentials from the supplied file; do not print them or place them in source code or commits.
+- Pass decrypted JSON credentials through process substitution; do not print or save plaintext credentials.
+  The script reads `folder_id` and `ai_studio.api_key` without knowing about SOPS or the secrets location.
 - Extraction preserves recording-relative timestamps, including pauses, and produces mono, 16 kHz, 16-bit PCM WAV.
   It refuses to overwrite an existing audio file.
 - Use Yandex SpeechKit asynchronous recognition with Russian recognition by default.
