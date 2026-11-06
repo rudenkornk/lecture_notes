@@ -12,14 +12,17 @@ $ F_(xi)(x) = P{xi <= x} $
 — #definition[функция распределения] $xi$.
 $F_(xi)(x)$ непрерывна справа в каждой точке.
 
-=== Плотность распределения
+#block(breakable: false, above: 1.1em)[
+  === Плотность распределения
 
-Пусть $p_(xi)(x)$ — #definition[плотность распределения] $xi$ и
-$
-  P{xi in B} = integral_B p_(xi)(x) dif x => F_(xi)(x) = integral_(-infinity)^x p_(xi)(t) dif t.
-$
-Тогда
-$ M(xi) = integral_(-infinity)^infinity x p_(xi)(x) dif x. $
+  Пусть $p_(xi)(x)$ — #definition[плотность распределения] $xi$ и
+  $
+    P{xi in B} = integral_B p_(xi)(x) dif x => F_(xi)(x) = integral_(-infinity)^x p_(xi)(t) dif t.
+  $
+  Тогда
+  $ M(xi) = integral_(-infinity)^infinity x p_(xi)(x) dif x. $
+
+]
 
 === Функция случайной величины
 
@@ -43,6 +46,7 @@ $
 $ = integral_(-infinity)^infinity f(t) p_(xi)(t) dif t, quad t = f^(-1)(x). $
 
 // Источник: с. 13.
+
 == Основные распределения
 
 === 1. Равномерное распределение
@@ -53,30 +57,35 @@ $
 $
 $ M(xi) = (b+a)/2, quad D(xi) = (b-a)^2/12. $
 
-=== 2. Показательное распределение
+#block(breakable: false, above: 1.1em)[
+  === 2. Показательное распределение
 
-Экспоненциальное распределение, $op("Exp")(lambda)$, $lambda > 0$:
-$ p_(xi)(x) = cases(lambda exp(-lambda x) quad & x >= 0, 0 quad & x < 0), $
-$ F_(xi)(x) = cases(1-e^(-lambda x) quad & x >= 0, 0 quad & x < 0), $
-$ M(xi) = 1/lambda, quad D(xi) = 1/lambda^2, quad "медиана" = (ln 2)/lambda. $
-*Memorylessness*, $x, t >= 0$:
-$ P{xi > x+t divides xi > x} = P{xi > t}. $
+  Экспоненциальное распределение, $op("Exp")(lambda)$, $lambda > 0$:
+  $ p_(xi)(x) = cases(lambda exp(-lambda x) quad & x >= 0, 0 quad & x < 0), $
+  $ F_(xi)(x) = cases(1-e^(-lambda x) quad & x >= 0, 0 quad & x < 0), $
+  $ M(xi) = 1/lambda, quad D(xi) = 1/lambda^2, quad "медиана" = (ln 2)/lambda. $
+  *Memorylessness*, $x, t >= 0$:
+  $ P{xi > x+t divides xi > x} = P{xi > t}. $
+]
 
-=== 3. Нормальное (гауссовское) распределение
+#block(breakable: false, above: 1.1em)[
+  === 3. Нормальное (гауссовское) распределение
 
-$sigma > 0$:
-$
-  p_(xi)(x) = 1/(sqrt(2 pi) sigma) exp(-(x-a)^2/(2sigma^2)) = 1/sigma phi((x-a)/sigma),
-$
-$ F_(xi)(x) = Phi((x-a)/sigma), quad M(xi) = a, quad D(xi) = sigma^2. $
-Переходит в #definition[стандартное нормальное распределение] при $a = 0$, $sigma = 1$.
-Обозначается $xi tilde N(a, sigma^2)$.
+  $sigma > 0$:
+  $
+    p_(xi)(x) = 1/(sqrt(2 pi) sigma) exp(-(x-a)^2/(2sigma^2)) = 1/sigma phi((x-a)/sigma),
+  $
+  $ F_(xi)(x) = Phi((x-a)/sigma), quad M(xi) = a, quad D(xi) = sigma^2. $
+  Переходит в #definition[стандартное нормальное распределение] при $a = 0$, $sigma = 1$.
+  Обозначается $xi tilde N(a, sigma^2)$.
 
-*Формула Миллса:*
-$ 1-Phi(x) approx e^(-x^2/2)/(sqrt(2 pi) x) (1-1/x^2+3/x^4 dots). $
+  *Формула Миллса:*
+  $ 1-Phi(x) approx e^(-x^2/2)/(sqrt(2 pi) x) (1-1/x^2+3/x^4 dots). $
 
-Показательное распределение отвечает на вопрос, с какой вероятностью следующее событие произойдёт через $x$,
-если события происходят независимо с интенсивностью $lambda$.
+  Показательное распределение отвечает на вопрос, с какой вероятностью следующее событие произойдёт через $x$,
+  если события происходят независимо с интенсивностью $lambda$.
+
+]
 
 === 4. Геометрическое распределение
 

@@ -1,6 +1,7 @@
 #import "../_shared/style.typ": definition
 
 // Источник: с. 7.
+
 == Случайные величины в счётной схеме
 
 === Распределение случайной величины
@@ -42,31 +43,39 @@ $ M(xi) = sum_(k=1)^infinity P{xi >= k} $
 
 Для $RR$:
 $ M(xi) = integral x f(x) dif x. $
-Если $xi >= 0$, то
-$
-  M(xi) = integral_0^infinity P{xi >= x} dif x = integral_0^infinity (1-F(x)) dif x.
-$
+#block(breakable: false)[
+  Если $xi >= 0$, то
+  $
+    M(xi) = integral_0^infinity P{xi >= x} dif x = integral_0^infinity (1-F(x)) dif x.
+  $
+]
 
-#definition[Формула полного математического ожидания]:
-$
-  M(xi) = M(M(xi divides eta)) = sum_i M(xi divides eta = y_i) dot P{eta = y_i}.
-$
+#block(breakable: false)[
+  #definition[Формула полного математического ожидания]:
+  $
+    M(xi) = M(M(xi divides eta)) = sum_i M(xi divides eta = y_i) dot P{eta = y_i}.
+  $
+]
 
 // Источник: с. 8.
-=== Дисперсия случайной величины
 
-$ D(xi) = M[(xi-M(xi))^2] = M(xi^2)-M(xi)^2. $
-#definition[Формула полной дисперсии]:
-$ D(xi) = M(D(xi divides eta)) + D(M(xi divides eta)). $
+#block(breakable: false, above: 1.1em)[
+  === Дисперсия случайной величины
 
-Свойства:
+  $ D(xi) = M[(xi-M(xi))^2] = M(xi^2)-M(xi)^2. $
+  #definition[Формула полной дисперсии]:
+  $ D(xi) = M(D(xi divides eta)) + D(M(xi divides eta)). $
 
-+ $D(xi) >= 0$; $D(xi) = 0 <=> xi$ — вырожденная величина.
-+ $D(a xi) = a^2 D(xi)$.
-+ Если $xi$ и $eta$ независимы, то $D(xi+eta) = D(xi)+D(eta)$.
-+ $D(xi+eta) = D(xi)+D(eta)+2 op("cov")(eta, xi)$.
-  $ D(xi+eta) = D(xi)+D(eta)+2 M(xi eta)-2 M(xi) M(eta). $
-+ $D(sum_i xi_i) = sum_i D(xi_i) + sum_(i != j) op("cov")(xi_i, xi_j)$.
+  Свойства:
+
+  + $D(xi) >= 0$; $D(xi) = 0 <=> xi$ — вырожденная величина.
+  + $D(a xi) = a^2 D(xi)$.
+  + Если $xi$ и $eta$ независимы, то $D(xi+eta) = D(xi)+D(eta)$.
+  + $D(xi+eta) = D(xi)+D(eta)+2 op("cov")(eta, xi)$.
+    $ D(xi+eta) = D(xi)+D(eta)+2 M(xi eta)-2 M(xi) M(eta). $
+  + $D(sum_i xi_i) = sum_i D(xi_i) + sum_(i != j) op("cov")(xi_i, xi_j)$.
+
+]
 
 === Ковариация
 
@@ -109,11 +118,13 @@ $
 $ M(xi eta)^2 <= M(xi^2) dot M(eta^2), $
 $ op("cov")(xi, eta)^2 <= D(xi) dot D(eta). $
 
-=== Свойства матрицы ковариации
+#block(breakable: false, above: 1.1em)[
+  === Свойства матрицы ковариации
 
-+ Симметричная.
-+ Неотрицательно определённая.
-+ Диагональные элементы $>= 0$.
-+ $lambda_i >= 0$ — собственные числа.
+  + Симметричная.
+  + Неотрицательно определённая.
+  + Диагональные элементы $>= 0$.
+  + $lambda_i >= 0$ — собственные числа.
 
-$ bold(a)^T op("Cov")(bold(xi)) bold(a) = D(bold(a)^T bold(xi)) >= 0. $
+  $ bold(a)^T op("Cov")(bold(xi)) bold(a) = D(bold(a)^T bold(xi)) >= 0. $
+]

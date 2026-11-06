@@ -1,5 +1,4 @@
 #import "../_shared/style.typ": style
-#import "../_shared/layout.typ": keep-sections
 
 #show: style
 #set text(lang: "ru")
@@ -8,14 +7,24 @@
 // Источник: с. 1.
 = Теория вероятностей
 
-#keep-sections(include "01-combinatorics.typ")
-#keep-sections(include "02-probability-spaces.typ")
-#keep-sections(include "03-random-variables.typ")
-#keep-sections(include "04-limit-theorems.typ")
-#keep-sections(include "05-continuous-distributions.typ")
-#keep-sections(include "06-generating-functions.typ")
-#keep-sections(include "07-lyapunov-borel-cantelli.typ")
-#keep-sections(include "08-statistics.typ")
-#keep-sections(include "09-multivariate-normal.typ")
-#keep-sections(include "10-convolution.typ")
-#keep-sections(include "11-more-distributions.typ")
+#include "01-combinatorics.typ"
+#pagebreak(weak: true)
+#include "02-probability-spaces.typ"
+#pagebreak(weak: true)
+#include "03-random-variables.typ"
+#pagebreak(weak: true)
+#include "04-limit-theorems.typ"
+#pagebreak(weak: true)
+#include "05-continuous-distributions.typ"
+#pagebreak(weak: true)
+#include "06-generating-functions.typ"
+#pagebreak(weak: true)
+#include "07-lyapunov-borel-cantelli.typ"
+#pagebreak(weak: true)
+#include "08-statistics.typ"
+#pagebreak(weak: true)
+#include "09-multivariate-normal.typ"
+#pagebreak(weak: true)
+#include "10-convolution.typ"
+#pagebreak(weak: true)
+#include "11-more-distributions.typ"

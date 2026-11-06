@@ -1,6 +1,7 @@
 #import "../_shared/style.typ": definition
 
 // Источник: с. 3.
+
 == Вероятностное пространство
 
 === Аксиоматика Колмогорова
@@ -19,18 +20,20 @@ $A, B$ — события; $Omega$ — достоверное событие; $e
 $overline(A) = Omega without A$ — противоположное $A$ событие.
 Если $A B = emptyset$, то $A$ и $B$ #definition[несовместны].
 
-=== Сигма-алгебра
+#block(breakable: false, above: 1.1em)[
+  === Сигма-алгебра
 
-Алгебра событий $F$, для которой:
+  Алгебра событий $F$, для которой:
 
-+ $Omega in F$;
-+ $forall A in F => overline(A) in F$;
-+ Для любой последовательности $A_1, A_2, dots in F$: $union_(i=1)^infinity A_i in F$,
+  + $Omega in F$;
+  + $forall A in F => overline(A) in F$;
+  + Для любой последовательности $A_1, A_2, dots in F$: $union_(i=1)^infinity A_i in F$,
 
-называется #definition[$sigma$-алгеброй].
+  называется #definition[$sigma$-алгеброй].
 
-*Теорема.* Если $F_1, F_2$ — $sigma$-алгебры, то $F_1 inter F_2$ — тоже $sigma$-алгебра.
-Доказательство очевидно.
+  *Теорема.* Если $F_1, F_2$ — $sigma$-алгебры, то $F_1 inter F_2$ — тоже $sigma$-алгебра.
+  Доказательство очевидно.
+]
 
 === Свойства событий
 
@@ -47,6 +50,7 @@ $
 $ A = A B + (A without B). $
 
 // Источник: с. 4.
+
 === Вероятность
 
 Числовая функция $P$ на $sigma$-алгебре $F$ называется #definition[вероятностью], если:
@@ -69,6 +73,7 @@ $ P(overline(A)) = 1-P(A), $
 $ P(A+B) = P(A)+P(B)-P(A B). $
 
 // Источник: с. 5.
+
 === Дискретное вероятностное пространство
 
 $Omega = {omega_1, dots, omega_n}$, $n in NN$ — #definition[конечная схема].
@@ -80,21 +85,24 @@ $ P(A) = sum_(omega in A) P(omega). $
 $ P(A) = abs(A)/abs(Omega) <=> P(omega_i) = 1/n quad forall i. $
 Для счётной схемы аналогично.
 
-=== Непрерывное вероятностное пространство
+#block(breakable: false, above: 1.1em)[
+  === Непрерывное вероятностное пространство
 
-$G$ — измеримая по Лебегу область в $RR^n$ (квадрируемая).
-$sigma$-алгебра $F$ содержит все квадрируемые подмножества $G$.
+  $G$ — измеримая по Лебегу область в $RR^n$ (квадрируемая).
+  $sigma$-алгебра $F$ содержит все квадрируемые подмножества $G$.
 
-#definition[Плотность вероятности] — измеримая функция $rho: G arrow RR$:
-$
-  forall x in G: rho(x) >= 0, quad integral_G dots integral rho(x) dif x_1 dots dif x_n = 1.
-$
-Тогда
-$ P(A) = integral_A dots integral rho(x) dif x_1 dots dif x_n. $
-Если $rho(x) equiv 1/m(G)$, где $m$ — мера Лебега и $0 < m(G) < infinity$, то
-$ P(A) = m(A)/m(G). $
+  #definition[Плотность вероятности] — измеримая функция $rho: G arrow RR$:
+  $
+    forall x in G: rho(x) >= 0, quad integral_G dots integral rho(x) dif x_1 dots dif x_n = 1.
+  $
+  Тогда
+  $ P(A) = integral_A dots integral rho(x) dif x_1 dots dif x_n. $
+  Если $rho(x) equiv 1/m(G)$, где $m$ — мера Лебега и $0 < m(G) < infinity$, то
+  $ P(A) = m(A)/m(G). $
+]
 
 // Источник: с. 6.
+
 === Условная вероятность
 
 Пусть $A, B in F$, $P(A) > 0$.
@@ -136,9 +144,11 @@ $k$-й — $m_k$ раз, равна
 $ P_(n)(m_1, dots, m_k) = n!/(m_1! dots m_k!) p_1^(m_1) dots p_k^(m_k). $
 Такая схема независимых испытаний называется #definition[полиномиальной].
 
-=== Схема Бернулли
+#block(breakable: false, above: 1.1em)[
+  === Схема Бернулли
 
-Вероятность $m$ успехов в $n$ испытаниях с вероятностью успеха $p$:
-$ P_(n)(m) = C_n^m p^m (1-p)^(n-m). $
-$ mu_n = sum_(i=1)^n xi_i $ — число успехов;
-$M(mu_n) = n p$, $D(mu_n) = n p(1-p)$.
+  Вероятность $m$ успехов в $n$ испытаниях с вероятностью успеха $p$:
+  $ P_(n)(m) = C_n^m p^m (1-p)^(n-m). $
+  $ mu_n = sum_(i=1)^n xi_i $ — число успехов;
+  $M(mu_n) = n p$, $D(mu_n) = n p(1-p)$.
+]

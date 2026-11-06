@@ -1,6 +1,7 @@
 #import "../_shared/style.typ": definition
 
 // Источник: с. 2.
+
 == Комбинаторика
 
 === Размещения без повторений
@@ -38,6 +39,7 @@ $
   $
     mat(
       delim: #none,
+      row-gap: #0.3em,
       , , , , , , , , 1, , , , , , , , ;
       , , , , , , , 1, , 1, , , , , , , ;
       , , , , , , 1, , 2, , 1, , , , , , ;
@@ -56,8 +58,12 @@ $ C_n^0 + C_n^2 + dots = C_n^1 + C_n^3 + dots = 2^(n-1). $
 
 === Хоккейная клюшка
 
-$ sum_(i=r)^n C_i^r = C_(n+1)^(r+1). $
-#align(center, image("images/hockey-stick.jpg", width: 28mm))
+#grid(
+  columns: (1fr, auto),
+  align: center + horizon,
+  [$ sum_(i=r)^n C_i^r = C_(n+1)^(r+1). $],
+  image("images/hockey-stick.jpg", width: 28mm),
+)
 
 === Тождество Вандермонда
 
