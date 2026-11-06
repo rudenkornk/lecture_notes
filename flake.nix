@@ -13,12 +13,15 @@
 
       typstWithPackages = pkgs.typst.withPackages (p: [ p.cetz_0_4_2 ]);
 
-      typstFontPaths = pkgs.lib.makeSearchPath "share/fonts" [
-        pkgs.paratype-pt-serif
-        pkgs.paratype-pt-sans
-        pkgs.stix-two
-        pkgs.dejavu_fonts
-      ];
+      typstFontPaths =
+        pkgs.lib.makeSearchPath "share/fonts" [
+          pkgs.cm_unicode
+          pkgs.paratype-pt-serif
+          pkgs.paratype-pt-sans
+          pkgs.stix-two
+          pkgs.dejavu_fonts
+        ]
+        + ":${pkgs.texlivePackages.lm-math.tex}/fonts/opentype";
 
       texWithPackages = pkgs.texliveSmall.withPackages (p: [
         p.collection-langcyrillic

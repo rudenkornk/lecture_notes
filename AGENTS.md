@@ -58,8 +58,8 @@ Actions are SHA-pinned; dependabot updates them and `flake.lock` weekly.
   Use relative imports so editor tooling resolves shared files.
   Use local set/show rules after that rule for overrides; keep document metadata in the entry point.
   Pass `--root src` to local Typst commands so shared imports resolve, matching the build's source root.
-- **Fonts**: the build passes `--ignore-system-fonts` and supplies PT Serif, PT Sans, STIX Two Math,
-  and DejaVu fonts through `TYPST_FONT_PATHS`, alongside Typst's embedded defaults.
+- **Fonts**: the build passes `--ignore-system-fonts` and supplies CMU Serif, Latin Modern Math, PT Serif, PT Sans,
+  STIX Two Math, and DejaVu fonts through `TYPST_FONT_PATHS`, alongside Typst's embedded defaults.
   Additional fonts require adding their packages to `typstFontPaths` in `flake.nix`.
 - **LaTeX**: compile directly with two `pdflatex` passes from the entry point's directory.
   Additional bibliography and index processing is not configured.
