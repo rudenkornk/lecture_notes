@@ -1,6 +1,7 @@
 #import "../_shared/style.typ": definition
 
 // Источник: с. 23.
+
 == Свёртка случайных величин
 
 Пусть $xi$, $eta$ независимы. Тогда:
@@ -36,17 +37,21 @@ $
   => xi+eta tilde N(mu_1+mu_2, sigma_1^2+sigma_2^2).
 $
 
-=== 7. Функция двух случайных величин
+#block(breakable: false, above: 1.1em)[
+  === 7. Функция двух случайных величин
 
-$f(xi, eta)$ — некоторая функция.
-$ M(f(xi, eta)) = sum_(i,j) f(x_i, y_j) dot P{xi = x_i} dot P{eta = y_j} $
-$
-  = integral_(-infinity)^infinity integral_(-infinity)^infinity f(x, y) p_(xi)(x) p_(eta)(y) dif x dif y.
-$
+  $f(xi, eta)$ — некоторая функция.
+  $ M(f(xi, eta)) = sum_(i,j) f(x_i, y_j) dot P{xi = x_i} dot P{eta = y_j} $
+  $
+    = integral_(-infinity)^infinity integral_(-infinity)^infinity f(x, y) p_(xi)(x) p_(eta)(y) dif x dif y.
+  $
+]
 
-=== 8. Максимум и минимум
+#block(breakable: false, above: 1.1em)[
+  === 8. Максимум и минимум
 
-$ F_(max(xi, eta))(x) = F_(xi)(x) dot F_(eta)(x), $
-$
-  F_(min(xi, eta))(x) = 1-(1-F_(xi)(x))(1-F_(eta)(x)) = F_(xi)(x)+F_(eta)(x)-F_(xi)(x) F_(eta)(x).
-$
+  $ F_(max(xi, eta))(x) = F_(xi)(x) dot F_(eta)(x), $
+  $
+    F_(min(xi, eta))(x) = 1-(1-F_(xi)(x))(1-F_(eta)(x)) = F_(xi)(x)+F_(eta)(x)-F_(xi)(x) F_(eta)(x).
+  $
+]

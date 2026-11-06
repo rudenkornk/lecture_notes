@@ -1,6 +1,8 @@
 #import "../_shared/style.typ": definition
 #import "diagrams.typ": cells, tree
 
+// Источник: с. 28.
+
 Несколько видов деревьев:
 + #definition[Детерминированные] (RB-дерево).
 + #definition[Амортизированные] (Splay-дерево).
@@ -56,15 +58,19 @@ $p_i$ — priority — HEAP.
   $"Split"(T, lambda) = (underbrace(T_1, <lambda), underbrace(lambda, "ключ"), underbrace(T_2, >lambda))$.
 ]
 
-Тогда,
-$
-  "Insert"(T, lambda) = "Split"(T, lambda)
-  arrow underbrace(underbrace(T_1 quad lambda, "merge") quad T_2, "merge").
-$
-$
-  "Remove"(T, lambda) = "Split"(T, lambda)
-  arrow (T_1, underbrace(lambda, "remove"), T_2) arrow "merge"(T_1, T_2).
-$
+#block(breakable: false)[
+  Тогда,
+  $
+    "Insert"(T, lambda) = "Split"(T, lambda)
+    arrow underbrace(underbrace(T_1 quad lambda, "merge") quad T_2, "merge").
+  $
+  $
+    "Remove"(T, lambda) = "Split"(T, lambda)
+    arrow (T_1, underbrace(lambda, "remove"), T_2) arrow "merge"(T_1, T_2).
+  $
+]
+
+// Источник: с. 29.
 
 === Merge($T_1, T_2$)
 
@@ -84,48 +90,57 @@ $O(log n)$. Ключи в $T_2 >=$ ключей в $T_1$!
     ).
   $]
 
-=== Split($T, lambda$)
+#block(breakable: false, above: 1.1em)[
+  === Split($T, lambda$)
 
-$"Split"(T, lambda) = (underbrace(T_1, <lambda), lambda, underbrace(T_2, >lambda))$.
-$O(log n)$.
+  $"Split"(T, lambda) = (underbrace(T_1, <lambda), lambda, underbrace(T_2, >lambda))$.
+  $O(log n)$.
 
-1. #tree(
-    (((0, 0), [$v$]), ((-0.7, -0.8), [$alpha$]), ((0.7, -0.8), [$beta$])),
-    ((0, 1), (0, 2)),
-  )
-  $K(v) = lambda => (alpha, v, beta)$.
-  $lambda$ в корне.
+  1. #tree(
+      (((0, 0), [$v$]), ((-0.7, -0.8), [$alpha$]), ((0.7, -0.8), [$beta$])),
+      ((0, 1), (0, 2)),
+    )
+    $K(v) = lambda => (alpha, v, beta)$.
+    $lambda$ в корне.
 
-2. #tree(
-    (((0, 0), [$v$]), ((-0.7, -0.8), [$alpha$]), ((0.7, -0.8), [$beta$])),
-    ((0, 1), (0, 2)),
-  )
-  $K(v) < lambda =>$ рекурсия $"Split"(beta, lambda) = (gamma, x, delta)$.
-  $=> (#tree((((0, 0), [$v$]), ((-0.7, -0.8), [$alpha$]), ((0.7, -0.8), [$gamma$])), ((0, 1), (0, 2))), x, delta)$.
+  2. #tree(
+      (((0, 0), [$v$]), ((-0.7, -0.8), [$alpha$]), ((0.7, -0.8), [$beta$])),
+      ((0, 1), (0, 2)),
+    )
+    $K(v) < lambda =>$ рекурсия $"Split"(beta, lambda) = (gamma, x, delta)$.
+    $=> (#tree((((0, 0), [$v$]), ((-0.7, -0.8), [$alpha$]), ((0.7, -0.8), [$gamma$])), ((0, 1), (0, 2))), x, delta)$.
+]
 
-=== Построение декартова дерева
+// Источник: с. 30.
 
-Пусть наборы $(k_i, p_i)$ отсортированы: $k_1 < k_2 < dots < k_n$.
-Тогда дерево строится за линейное время $O(n)$.
+#block(breakable: false, above: 1.1em)[
+  === Построение декартова дерева
 
-Индукция: $T_i arrow^(+(k, p)) T_(i + 1)$; $(k, p)$ — новая пара из упорядоченного набора.
+  Пусть наборы $(k_i, p_i)$ отсортированы: $k_1 < k_2 < dots < k_n$.
+  Тогда дерево строится за линейное время $O(n)$.
 
-#align(center, grid(
-  columns: (auto, auto, auto),
-  column-gutter: 1em,
-  align: horizon,
-  image("images/cartesian-build-before.jpg", width: 45mm),
-  [$arrow$],
-  image("images/cartesian-build-after.jpg", width: 52mm),
-))
+  Индукция: $T_i arrow^(+(k, p)) T_(i + 1)$; $(k, p)$ — новая пара из упорядоченного набора.
 
-$p(x_1) > p(x_2) > dots > p(x_l)$.\
-$p(x_i) > p > p(x_(i + 1))$.
+  #align(center, grid(
+    columns: (auto, auto, auto),
+    column-gutter: 1em,
+    align: horizon,
+    image("images/cartesian-build-before.jpg", width: 45mm),
+    [$arrow$],
+    image("images/cartesian-build-after.jpg", width: 52mm),
+  ))
 
-Точку вставки нужно искать с конца правого пути.
-Если далеко от конца, тем сильнее сократится правый путь и следующая вставка будет дешевле.
-Поэтому сложность тут — амортизированная $O(n)$.
+  $p(x_1) > p(x_2) > dots > p(x_l)$.\
+  $p(x_i) > p > p(x_(i + 1))$.
 
+  Точку вставки нужно искать с конца правого пути.
+  Если далеко от конца, тем сильнее сократится правый путь и следующая вставка будет дешевле.
+  Поэтому сложность тут — амортизированная $O(n)$.
+]
+
+// Источник: с. 31.
+
+#pagebreak(weak: true)
 == Структура данных «B-деревья»
 
 Используются для данных большого размера, не укладывающихся в оперативную память.
@@ -152,7 +167,7 @@ $p(x_i) > p > p(x_(i + 1))$.
 #grid(
   columns: (auto, 1fr),
   column-gutter: 2em,
-  image("images/b-tree-levels.jpg", width: 70mm),
+  image("images/b-tree-levels.jpg", width: 55mm),
   [Ключи с данными хранятся все на одном уровне.
     Причём, чтобы не иметь множество висячих вершин, реально все хранятся на предпоследнем уровне,
     а последний есть только «виртуально».
@@ -163,7 +178,7 @@ $p(x_i) > p > p(x_(i + 1))$.
 #grid(
   columns: (auto, 1fr),
   column-gutter: 2em,
-  image("images/b-tree-linked-leaves.jpg", width: 90mm),
+  image("images/b-tree-linked-leaves.jpg", width: 55mm),
   [$d approx 1000$, $alpha in (0; 1 / 2)$.
 
     Корень хранит от 1 до $d$ ключей.
@@ -175,43 +190,50 @@ $p(x_i) > p > p(x_(i + 1))$.
 FindRange — выписывает подряд идущие ключи.
 Для эффективности предпоследний уровень связан.
 
-=== Insert
+// Источник: с. 32.
 
-Если ключей $< d$ в вершине, то просто вставляем.
-Если ключей $d$, то нужно разделить на две вершины.
+#block(breakable: false, above: 1.1em)[
+  === Insert
 
-#align(center)[$
-  #tree((((0, 2), []), ((0, -1), [#ellipse(inset: 5pt)[$bullet bullet bullet bullet$]\ $d$ ключей])), ((0, 1),))
-  arrow^(+(k, v))
-  #tree((((0, 2), []), ((-1.5, -1), [#ellipse(inset: 5pt)[$bullet bullet bullet$]\ $ceil((d + 1) / 2)$]), ((1.5, -1), [#ellipse(inset: 5pt)[$bullet bullet bullet$]\ $floor((d + 1) / 2)$])), ((0, 1), (0, 2)))
-$]
+  Если ключей $< d$ в вершине, то просто вставляем.
+  Если ключей $d$, то нужно разделить на две вершины.
 
-Переполнение на уровне выше решается аналогично.
-Переполнение в корне создаёт новый уровень.
+  #align(center)[$
+    #tree((((0, 2), []), ((0, -1), [#ellipse(inset: 5pt)[$bullet bullet bullet bullet$]\ $d$ ключей])), ((0, 1),))
+    arrow^(+(k, v))
+    #tree((((0, 2), []), ((-1.5, -1), [#ellipse(inset: 5pt)[$bullet bullet bullet$]\ $ceil((d + 1) / 2)$]), ((1.5, -1), [#ellipse(inset: 5pt)[$bullet bullet bullet$]\ $floor((d + 1) / 2)$])), ((0, 1), (0, 2)))
+  $]
 
-=== Remove
+  Переполнение на уровне выше решается аналогично.
+  Переполнение в корне создаёт новый уровень.
 
-#ellipse(inset: 5pt)[$bullet bullet times bullet$]
+]
 
-Если ключей $> alpha d$, то всё готово и закончено.
-Если ключей ровно $alpha d$, то можно позаимствовать у соседа:
+#block(breakable: false, above: 1.1em)[
+  === Remove
 
-#align(center)[$
-  #ellipse(inset: 5pt)[$bullet bullet bullet$] _(alpha d)
-  arrow.l
-  #ellipse(inset: 5pt)[$bullet bullet bullet bullet bullet$] _(>alpha d)
-$]
+  #ellipse(inset: 5pt)[$bullet bullet times bullet$]
 
-Sharing — выравнивание размера.
+  Если ключей $> alpha d$, то всё готово и закончено.
+  Если ключей ровно $alpha d$, то можно позаимствовать у соседа:
 
-Если у соседа также $alpha d$ ключей, то необходимо выполнить объединение.
-Обе вершины объединяем в одну, так как $alpha < 1 / 2$.
-Удаление ключа выше аналогично.
+  #align(center)[$
+    #ellipse(inset: 5pt)[$bullet bullet bullet$] _(alpha d)
+    arrow.l
+    #ellipse(inset: 5pt)[$bullet bullet bullet bullet bullet$] _(>alpha d)
+  $]
 
-#align(center)[$
-  #tree((((0, 2), []), ((-1.5, -1), [#ellipse(inset: 5pt)[$bullet times bullet$]\ $alpha d$]), ((1.5, -1), [#ellipse(inset: 5pt)[$bullet bullet bullet$]\ $alpha d$])), ((0, 1), (0, 2)))
-  arrow^(-(k, v))_("fuse")
-  #tree((((0, 2), []), ((0, -1), [#ellipse(inset: 5pt)[$bullet bullet bullet bullet bullet$]\ $2 alpha d - 1$])), ((0, 1),))
-$]
+  Sharing — выравнивание размера.
 
-B-деревья используются в базах данных, например BDB (Berkeley).
+  Если у соседа также $alpha d$ ключей, то необходимо выполнить объединение.
+  Обе вершины объединяем в одну, так как $alpha < 1 / 2$.
+  Удаление ключа выше аналогично.
+
+  #align(center)[$
+    #tree((((0, 2), []), ((-1.5, -1), [#ellipse(inset: 5pt)[$bullet times bullet$]\ $alpha d$]), ((1.5, -1), [#ellipse(inset: 5pt)[$bullet bullet bullet$]\ $alpha d$])), ((0, 1), (0, 2)))
+    arrow^(-(k, v))_("fuse")
+    #tree((((0, 2), []), ((0, -1), [#ellipse(inset: 5pt)[$bullet bullet bullet bullet bullet$]\ $2 alpha d - 1$])), ((0, 1),))
+  $]
+
+  B-деревья используются в базах данных, например BDB (Berkeley).
+]

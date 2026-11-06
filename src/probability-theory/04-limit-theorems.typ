@@ -1,7 +1,8 @@
-#import "../_shared/style.typ": definition
+#import "../_shared/style.typ": accent, definition
 #import "@preview/cetz:0.4.2"
 
 // Источник: с. 9.
+
 == Предельные теоремы
 
 === Биномиальное распределение (6)
@@ -32,42 +33,49 @@ $ P{abs(xi-M(xi)) < Delta} >= 1-D(xi)/Delta^2. $
 === Неравенство Йенсена
 
 $f(x)$ — выпуклая вниз функция.
-$ f(M(xi)) <= M(f(xi)). $
-#align(center, cetz.canvas(length: 8mm, {
-  import cetz.draw: *
-  set-style(stroke: 0.6pt + rgb("#283f8a"))
-  line((0, 0), (2.5, 0), mark: (end: ">"))
-  line((0, 0), (0, 1.8), mark: (end: ">"))
-  line(
-    ..range(0, 41).map(j => {
-      let x = 0.2 + j * 0.05
-      (x, 0.35 + 0.85 * calc.pow(x - 1.15, 2))
-    }),
-  )
-  content((2.5, -0.2), $x$)
-  content((2.45, 1.2), $f(x)$)
-}))
+#grid(
+  columns: (1fr, auto),
+  align: center + horizon,
+  [$ f(M(xi)) <= M(f(xi)). $],
+  cetz.canvas(length: 8mm, {
+    import cetz.draw: *
+    set-style(stroke: 0.6pt + accent)
+    line((0, 0), (2.5, 0), mark: (end: ">"))
+    line((0, 0), (0, 1.8), mark: (end: ">"))
+    line(
+      ..range(0, 41).map(j => {
+        let x = 0.2 + j * 0.05
+        (x, 0.35 + 0.85 * calc.pow(x - 1.15, 2))
+      }),
+    )
+    content((2.5, -0.2), $x$)
+    content((2.45, 1.2), $f(x)$)
+  }),
+)
 
-=== Виды сходимости
+#block(breakable: false, above: 1.1em)[
+  === Виды сходимости
 
-+ #definition[Сходимость almost surely]:
-  $
-    xi_n arrow^("a.s.") xi <=> P{omega: lim_(n arrow infinity) xi_(n)(omega) = xi(omega)} = 1.
-  $
-+ #definition[Сходимость по вероятности]:
-  $
-    xi_n arrow^P xi <=> forall epsilon > 0:
-    lim_(n arrow infinity) P(abs(xi_n-xi) > epsilon) = 0.
-  $
-+ #definition[Сходимость в среднем порядка $p$] ($L^p$-сходимость):
-  $ xi_n arrow^(L^p) xi <=> lim_(n arrow infinity) M(abs(xi_n-xi)^p) = 0. $
-+ #definition[Сходимость по распределению]:
-  $ xi_n arrow^d xi <=> lim_(n arrow infinity) F_(xi_n)(x) = F_(xi)(x) $
-  во всех точках непрерывности $F_xi$.
+  + #definition[Сходимость almost surely]:
+    $
+      xi_n arrow^("a.s.") xi <=> P{omega: lim_(n arrow infinity) xi_(n)(omega) = xi(omega)} = 1.
+    $
+  + #definition[Сходимость по вероятности]:
+    $
+      xi_n arrow^P xi <=> forall epsilon > 0:
+      lim_(n arrow infinity) P(abs(xi_n-xi) > epsilon) = 0.
+    $
+  + #definition[Сходимость в среднем порядка $p$] ($L^p$-сходимость):
+    $ xi_n arrow^(L^p) xi <=> lim_(n arrow infinity) M(abs(xi_n-xi)^p) = 0. $
+  + #definition[Сходимость по распределению]:
+    $ xi_n arrow^d xi <=> lim_(n arrow infinity) F_(xi_n)(x) = F_(xi)(x) $
+    во всех точках непрерывности $F_xi$.
 
-$ "a.s." => P => d, quad L^p => P. $
+  $ "a.s." => P => d, quad L^p => P. $
+]
 
 // Источник: с. 10.
+
 === Закон больших чисел Чебышёва
 
 Пусть ${xi_i}$ — последовательность попарно независимых случайных величин,
@@ -106,13 +114,15 @@ $ phi(x) = 1/sqrt(2 pi) exp(-x^2/2). $
 
 $ x! approx sqrt(2 pi) x^(x+0.5) e^(-x). $
 
-=== Локальная теорема Муавра — Лапласа
+#block(breakable: false, above: 1.1em)[
+  === Локальная теорема Муавра — Лапласа
 
-В схеме Бернулли при фиксированном $0 < p < 1$, $q = 1-p$, $n arrow infinity$
-и целочисленном $m$, для которого $abs(m-n p) = O(sqrt(n))$:
-$ P{mu_n = m} tilde 1/sigma(mu_n) phi((m-M(mu_n))/sigma(mu_n)). $
-$ M(mu_n) = n p, quad sigma(mu_n) = sqrt(n p q). $
-Пометка источника: «$n > 100$» — практический ориентир, а не достаточное условие теоремы.
+  В схеме Бернулли при фиксированном $0 < p < 1$, $q = 1-p$, $n arrow infinity$
+  и целочисленном $m$, для которого $abs(m-n p) = O(sqrt(n))$:
+  $ P{mu_n = m} tilde 1/sigma(mu_n) phi((m-M(mu_n))/sigma(mu_n)). $
+  $ M(mu_n) = n p, quad sigma(mu_n) = sqrt(n p q). $
+  Пометка источника: «$n > 100$» — практический ориентир, а не достаточное условие теоремы.
+]
 
 *Доказательство.*
 $ P{mu_n = m} = n!/(m! (n-m)!) p^m q^(n-m) approx $
@@ -123,6 +133,7 @@ $ = 1/sqrt(2 pi) sqrt(n/((n-m)m)) ((p n)/m)^m ((q n)/(n-m))^(n-m). $
 Положим $Delta_m = m/n-p$.
 
 // Источник: с. 11.
+
 $
   ((p n)/m)^m ((q n)/(n-m))^(n-m)
   = (1+Delta_m/p)^(-n(p+Delta_m)) (1-Delta_m/q)^(-n(q-Delta_m)) = T.
@@ -177,6 +188,7 @@ $
 при условии, что они независимы и происходят со средней интенсивностью $lambda$.
 
 // Источник: с. 12.
+
 === Интегральная теорема Муавра — Лапласа
 
 $ Phi(x) = integral_(-infinity)^x phi(t) dif t $

@@ -6,7 +6,7 @@
   content((0, -0.72), label)
 })
 
-#let tree(nodes, edges, unit: 0.65cm, y-scale: 1) = box(
+#let tree(nodes, edges, unit: 0.5cm, y-scale: 1) = box(
   baseline: 50%,
   cetz.canvas(
     length: unit,
@@ -37,7 +37,7 @@
 
 #let cells(..items) = table(
   columns: items.pos().len(),
-  inset: (x: 5pt, y: 3pt),
+  inset: (x: 3pt, y: 2pt),
   stroke: 0.5pt,
   align: center,
   ..items.pos(),
