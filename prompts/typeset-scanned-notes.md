@@ -30,11 +30,16 @@ Apply approved corrections, revert rejected provisional changes, and complete fi
 ## Structure and typeset
 
 - Use chapter files and a `main.typ` entry point.
-- Import shared styling and helpers using relative paths.
-- Reuse the shared opt-in `keep-sections` helper:
-  keep each smallest titled subsection with its diagrams on one page.
-- Allow larger topics to break between subsections.
-- Ask before changing the layout of a subsection that exceeds one page.
+- Import `style` from `../_shared/style.typ` and apply `#show: style` in the entry point.
+  Import other shared helpers using relative paths.
+- Reuse the shared A5, 9pt textbook typography, fonts, heading hierarchy, and colors.
+  Do not recreate the style locally or change font sizes or margins to meet a page target.
+- Let content flow naturally rather than matching source-page boundaries or keeping whole subsections on one page.
+  Keep headings with following content and small diagrams and tables with their explanations.
+- Prefer major topic headings at page starts when this improves the flow.
+  Add selective page breaks, not a blanket break before every heading; let smaller subheadings flow unless awkward.
+  Allow up to 10% more pages than the compact natural-flow layout, not as a target to fill.
+  Avoid large empty areas and let longer sections span pages.
 
 ## Reproduce diagrams faithfully
 
@@ -56,9 +61,12 @@ Apply approved corrections, revert rejected provisional changes, and complete fi
 ## Verify thoroughly
 
 - Compare the transcription and every illustration against the source.
+- After approved compaction, verify mathematical correctness and the retained assumptions, qualifications,
+  proof sketches, complexity claims, and failure cases.
 - Render and inspect every output page at readable resolution.
 - Fix clipping, overlapping labels, malformed formulas, incorrect diagram semantics, and awkward pagination.
-- Run the repository's full build and lint checks.
+  Confirm that the page count stays within the pagination budget without shrinking the shared typography.
+- Run the repository's format, lint, and full build checks.
 - Do not claim complete verification based only on thumbnails or selected pages.
 
 ## Preserve the original
