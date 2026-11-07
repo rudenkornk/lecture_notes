@@ -17,8 +17,7 @@ unless a wrong assumption would require substantial rework.
 While transcribing, make reasonable provisional choices and record ambiguities, suspected errors, and proposed corrections.
 Do not silently treat uncertain readings or mathematical corrections as confirmed.
 
-After transcription, present the collected questions in small, focused batches.
-Apply approved corrections, revert rejected provisional changes, and complete final verification before committing.
+After transcription, record all ambiguities, suspected errors, and proposed corrections in a separate uncommitted file.
 
 ## Transcribe the complete source
 
