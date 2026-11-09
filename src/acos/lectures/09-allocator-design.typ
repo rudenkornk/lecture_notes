@@ -348,4 +348,98 @@ contention, кэш/TLB. Нужны реальные размеры, времен
   Запись 03.11: 03:14–04:17; слайды «Алгоритмы», «Реализации»;
   #link("https://google.github.io/tcmalloc/design.html")[TCMalloc design].
 ]
+#nextpage("Как устроены аллокаторы")
+
+== Сравнение реализаций: устройство и память
+
+Сводка по документации на ноябрь 2026. TCMalloc — *Google TCMalloc*, не gperftools;
+mimalloc — *v3*. Поведение зависит от платформы, сборки и настроек.
+
+#gridtable(
+  (0.85fr, 1.55fr, 1.55fr, 1.6fr),
+  [*Реализация*],
+  [*Объекты и метаданные*],
+  [*Потоки / remote free*],
+  [*Возврат и крупные блоки*],
+  [*jemalloc*],
+  [Классы → slabs, bitmap; radix-индекс → extent.],
+  [Арены + tcache; сброс из кэша в арену-владельца.],
+  [Extents, split/merge; decay/purge, фоновый поток — опция.],
+  [*TCMalloc*],
+  [Классы → spans; free lists/bitmap, pagemap → span.],
+  [Per-CPU (rseq) или per-thread; обмен пачками через central/transfer caches.],
+  [Pageheap; hugepage-aware backend, настраиваемый возврат ОС.],
+  [*mimalloc*],
+  [Классы → страницы аллокатора; free lists, отдельные метаданные, pagemap.],
+  [Локальные и конкурентные free lists на страницу; remote free через атомики.],
+  [Arenas; purge/decommit с задержкой; настройки THP/huge pages.],
+  [*snmalloc*],
+  [Slabs, free lists; pagemap → класс, владелец и отдельный дескриптор.],
+  [Локальная выдача; remote free — сообщения владельцу пачками.],
+  [Backend: buddy-диапазоны, резервирование/commit через платформенный слой.],
+  [*oneTBB*\ `tbbmalloc`],
+  [Slabs 16 KiB; bump + free list; заголовок slab и back references.],
+  [TLS bins; чужой free → public free list, затем обработка владельцем.],
+  [Кэши slabs/крупных объектов; очистка, возврат регионов; huge pages — опция.],
+  [*glibc malloc*],
+  [Chunks переменных размеров, boundary tags, bins; ссылки в свободных chunks.],
+  [Арены с locks + tcache; чужой блок может попасть в кэш освобождающего потока.],
+  [Слияние chunks; trim/purge; отдельные mmap-блоки → munmap.],
+  [*Scudo*],
+  [Primary: классы и одинаковые блоки; checksum-заголовок перед объектом.],
+  [Локальные кэши: exclusive TLS или shared TSD, зависит от конфигурации.],
+  [Primary возвращает пустые страницы; Secondary: крупные mappings и их кэш.],
+  [*GWP-ASan*],
+  [Семплируемый защищённый пул, метаданные и стеки alloc/free.],
+  [Встраивается в основной аллокатор; остальные запросы идут обычным путём.],
+  [Guard pages; освобождённый слот недоступен до повторной выдачи.],
+)
+
+== Защита и практические особенности
+
+#gridtable(
+  (0.85fr, 2fr, 2.7fr),
+  [*Реализация*],
+  [*Проверки / защитные режимы*],
+  [*Что учитывать при выборе*],
+  [jemalloc],
+  [Junk fill — опция; дополнительные debug-проверки.],
+  [Heap-профили, mallctl, тонкая настройка; арены и tcache удерживают память.],
+  [TCMalloc],
+  [Есть семплируемые guarded allocations; это не проверка каждого объекта.],
+  [Per-CPU и hugepage-aware размещение; баланс throughput, RSS и TLB.],
+  [mimalloc],
+  [Secure: защита метаданных, кодирование ссылок, double-free/padding checks;
+    guarded — отдельный режим.],
+  [Локальность и first-class heaps; набор проверок и цена зависят от уровня secure.],
+  [snmalloc],
+  [Hardened: изоляция метаданных, защита free lists, рандомизация.],
+  [Интересен для producer–consumer и пакетных free; сообщения могут ждать обработки владельцем.],
+  [oneTBB],
+  [Debug asserts; не замена ASan для проверки обращений.],
+  [Scalable API, malloc proxy, memory pools; локальные и крупные кэши увеличивают запас памяти.],
+  [glibc malloc],
+  [Safe-Linking, проверки связей/размеров и части double-free; perturb — опция.],
+  [Обычный системный baseline; заголовки, арены и кэши влияют на расход и фрагментацию.],
+  [Scudo],
+  [Checksum, состояние и alignment; guard pages у Secondary;
+    quarantine — опция.],
+  [Ориентирован на hardening; checks стоят времени и памяти, quarantine по умолчанию выключена.],
+  [GWP-ASan],
+  [Overflow/UAF на выбранных аллокациях; аппаратный fault и стеки.],
+  [Малая средняя цена для production; вероятностное покрытие, не самостоятельная замена malloc.],
+)
+
+#source[
+  #link("https://jemalloc.net/jemalloc.3.html")[jemalloc(3)],
+  #link("https://google.github.io/tcmalloc/design.html")[TCMalloc design],
+  #link("https://google.github.io/tcmalloc/gwp-asan.html")[guarded sampling],
+  #link("https://github.com/microsoft/mimalloc")[mimalloc],
+  #link("https://github.com/microsoft/snmalloc/blob/main/docs/AddressSpace.md")[snmalloc backend],
+  #link("https://github.com/microsoft/snmalloc/blob/main/docs/security/README.md")[hardening],
+  #link("https://github.com/uxlfoundation/oneTBB/tree/master/src/tbbmalloc")[oneTBB, исходники],
+  #link("https://github.com/bminor/glibc/blob/master/malloc/malloc.c")[glibc malloc.c],
+  #link("https://llvm.org/docs/ScudoHardenedAllocator.html")[Scudo],
+  #link("https://llvm.org/docs/GwpAsan.html")[GWP-ASan].
+]
 #finish("9")
