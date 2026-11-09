@@ -7,3 +7,4 @@
 #include "lectures/05-paging.typ"
 #include "lectures/06-segmentation.typ"
 #include "lectures/07-caches.typ"
+#include "lectures/08-cache-policies-allocators.typ"
