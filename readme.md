@@ -28,6 +28,10 @@ src/
 - Other files are not compiled independently; put homework fragments in subdirectories.
 - `src/_shared/` holds shared styling and is excluded from document discovery.
 
+Scanned notes are stored with Git LFS as `src/<course>/original.pdf`.
+Numbered volumes use `original-1.pdf`, `original-2.pdf`, and so on, with `supplements.pdf` in the same course directory.
+Cheat sheets and mixed-math notes have separate directories, each containing `original.pdf`.
+
 ## Development
 
 [Nix](https://nixos.org/) is the only prerequisite.
