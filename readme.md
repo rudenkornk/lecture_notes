@@ -1,6 +1,8 @@
 # `lecture-notes`
 
-Lecture notes and homework for multiple courses, written in [Typst](https://typst.app) or LaTeX.
+Lecture notes and homework for multiple courses, written in [`Typst`](https://typst.app) or `LaTeX`.
+
+![Notebook covers and scanned notes for the course collection.](assets/notes-preview.png)
 
 ## Organization
 
