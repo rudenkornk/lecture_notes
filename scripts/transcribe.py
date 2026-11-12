@@ -141,7 +141,7 @@ def _recognize(audio: Path, output: Path, chunk: _Chunk, headers: dict[str, str]
         )
         if "error" in status:
             raise RuntimeError(status["error"])
-        if status.get("done"):
+        if status.get("done", False):
             break
         time.sleep(15)
     result = _request(f"{API}/getRecognition?operation_id={operation_id}", headers)
