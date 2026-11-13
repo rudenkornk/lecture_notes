@@ -49,3 +49,9 @@
 )[
   #include "08-random-forest-cv.typ"
 ]
+#chapter(
+  "09 · Градиентный бустинг и квантильная регрессия",
+  "10.11.2026 · Антиградиент, AdaBoost, XGBoost, валидация и интервалы.",
+)[
+  #include "09-gradient-boosting.typ"
+]
