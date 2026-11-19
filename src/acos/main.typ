@@ -9,3 +9,4 @@
 #include "lectures/07-caches.typ"
 #include "lectures/08-cache-policies-allocators.typ"
 #include "lectures/09-allocator-design.typ"
+#include "lectures/10-x86-64-assembly.typ"
