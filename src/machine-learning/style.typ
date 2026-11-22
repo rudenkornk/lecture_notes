@@ -84,12 +84,16 @@
   body,
 )
 
-#let fig(path, source, caption) = block(
+#let fig(path, source, caption, width: 100%) = block(
   breakable: false,
   above: 5pt,
   below: 5pt,
 )[
-  #image(path, width: 100%)
+  #if width == 100% { image(path, width: width) } else {
+    align(center, image(path, width: width))
+  }
   #v(2pt)
-  #text(font: "PT Sans", size: 7.8pt, fill: muted)[#caption · #source]
+  #text(font: "PT Sans", size: 7.8pt, fill: muted)[#if (
+      caption != none
+    ) [#caption · ]#source]
 ]
