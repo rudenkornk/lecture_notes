@@ -6,4 +6,5 @@ extend-ignore-re = [
 ]
 
 [default.extend-words]
+FPR = "FPR"
 MAPE = "MAPE"
