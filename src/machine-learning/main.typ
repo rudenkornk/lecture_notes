@@ -55,3 +55,9 @@
 )[
   #include "09-gradient-boosting.typ"
 ]
+#chapter(
+  "10 · Метрики, признаки и обучение без учителя",
+  "17.11.2026 · ROC и PR, кодирование категорий, стекинг, кластеризация и PCA.",
+)[
+  #include "10-metrics-features-clustering.typ"
+]
